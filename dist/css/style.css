@@ -1,0 +1,22 @@
+.world {
+    position: fixed;
+    border-collapse: collapse;
+    border: 5px solid;
+}
+
+.cell {
+    width: 5px;
+    height: 5px;
+}
+
+.shuttle {
+    background-color: crimson;
+    width: 5px;
+    height: 5px;
+}
+
+.fire {
+    background-color: darkblue;
+    width: 5px;
+    height: 5px;
+}
