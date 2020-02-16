@@ -20,6 +20,7 @@ class Shuttle {
         for (let position of positions) {
             var cell = document.getElementById(position);
             cell.className = this.className;
+            cell.title = this.title;
         }
     }
 
@@ -89,31 +90,35 @@ class Fire {
     }
 
     moveFire() {
-        console.log("SHOOTING");
 
-        var cell = document.getElementById(this.y - 1 + "-" + this.x);
-        console.log(cell);
 
-        if (cell.id != "shuttle") {
+        if (this.x != 101) {
+
+            var cell = document.getElementById(this.y + "-" + (this.x - 1));
+
+            if (cell.title != "shuttle") {
+                cell.className = "cell";
+                cell.title = "cell";
+            }
+
+            var cell = document.getElementById(this.y + "-" + this.x);
+
+            cell.className = this.className;
+            cell.title = this.title;
+
+            this.x += 1;
+        } else {
+
+            var cell = document.getElementById(this.y + "-" + (this.x - 1));
             cell.className = "cell";
             cell.title = "cell";
+            this.x += 1;
+
+
         }
 
-        var cell = document.getElementById(this.y + "-" + this.x);
 
-        console.log(cell);
-        cell.className = this.className;
-        cell.title = this.title;
-
-        this.x += 1;
-
-        console.log(this);
     }
-
-    // shoot() {
-
-    // }
-
 
 
 }

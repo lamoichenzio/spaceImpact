@@ -38,19 +38,24 @@ function checkKey(e) {
 window.onload = function() {
 
     shuttle = new Shuttle();
-
-    this.console.log(shuttle);
-
     document.getElementById("startGame").addEventListener("click", () => {
         shuttle.createShuttle();
         let fire = new Fire(shuttle);
-        setInterval(function() { fire.moveFire(); }, 10);
+
+        var intervall = setInterval(function() {
+            if (fire.x <= 101) {
+                fire.moveFire();
+            } else {
+                clearInterval(intervall)
+            }
+        }, 10);
+
+
 
     });
     document.getElementById("createButton").addEventListener("click", createWorld);
 
     document.addEventListener("keydown", (e) => checkKey(e));
-
 
 
 }
