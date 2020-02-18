@@ -27,9 +27,10 @@ class Shuttle {
     moveUp() {
 
         if (this.y[0] > 2) {
+            console.log("here");
 
-            let oldPositions = [];
-            let newPosition = [];
+            var oldPositions = [];
+            var newPosition = [];
             for (let i = 0; i <= 3; i++) {
                 oldPositions.push(this.y[i] + "-" + this.x[i]);
                 this.y[i] -= 2;
@@ -47,11 +48,17 @@ class Shuttle {
                 cell.className = this.className;
                 cell.title = this.title;
             }
+        } else {
+
+            console.log("no condition");
+            console.log(this.y[0]);
+
         }
     }
 
     moveDown() {
         if (this.y[2] < 29) {
+            console.log("here");
 
             let oldPositions = [];
             let newPosition = [];
@@ -73,6 +80,11 @@ class Shuttle {
 
                 // cell.id = this.id;
             }
+        } else {
+
+            console.log("no condition");
+            console.log(this.y[0]);
+
         }
     }
 
@@ -104,24 +116,25 @@ class Fire {
             var cell = document.getElementById(this.y + "-" + this.x);
 
             if (cell.title == "enemy") {
+                console.log("enemyyyyy");
+
 
                 var second_cell = document.getElementById(this.y + 1 + "-" + this.x);
                 if (second_cell != undefined && second_cell.title == "enemy") {
-                    console.log("cell below");
+                    console.log("below");
 
                     second_cell.className = "cell";
                     second_cell.title = "cell";
 
                 }
                 var third_cell = document.getElementById(this.y - 1 + "-" + this.x);
-                if (third_cell != undefined && second_cell.title == "enemy") {
-                    console.log("cell above");
-
+                if (third_cell != undefined && third_cell.title == "enemy") {
                     third_cell.className = "cell";
                     third_cell.title = "cell";
+                    console.log("above");
+
 
                 }
-                console.log("enemyyyyy");
                 this.x = 101;
 
 
