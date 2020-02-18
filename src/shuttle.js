@@ -64,11 +64,13 @@ class Shuttle {
             for (let position of oldPositions) {
                 let cell = document.getElementById(position);
                 cell.className = "cell";
-                cell.id = position;
+                cell.title = "cell";
             }
             for (let position of newPosition) {
                 let cell = document.getElementById(position);
                 cell.className = this.className;
+                cell.title = this.title;
+
                 // cell.id = this.id;
             }
         }
@@ -90,8 +92,6 @@ class Fire {
     }
 
     moveFire() {
-
-
         if (this.x != 101) {
 
             var cell = document.getElementById(this.y + "-" + (this.x - 1));
@@ -103,10 +103,35 @@ class Fire {
 
             var cell = document.getElementById(this.y + "-" + this.x);
 
-            cell.className = this.className;
-            cell.title = this.title;
+            if (cell.title == "enemy") {
 
-            this.x += 1;
+                var second_cell = document.getElementById(this.y + 1 + "-" + this.x);
+                if (second_cell != undefined && second_cell.title == "enemy") {
+                    console.log("cell below");
+
+                    second_cell.className = "cell";
+                    second_cell.title = "cell";
+
+                }
+                var third_cell = document.getElementById(this.y - 1 + "-" + this.x);
+                if (third_cell != undefined && second_cell.title == "enemy") {
+                    console.log("cell above");
+
+                    third_cell.className = "cell";
+                    third_cell.title = "cell";
+
+                }
+                console.log("enemyyyyy");
+                this.x = 101;
+
+
+            } else {
+                cell.className = this.className;
+                cell.title = this.title;
+                this.x += 1;
+
+            }
+
         } else {
 
             var cell = document.getElementById(this.y + "-" + (this.x - 1));
@@ -114,12 +139,10 @@ class Fire {
             cell.title = "cell";
             this.x += 1;
 
-
         }
 
 
     }
-
 
 }
 

@@ -1,4 +1,5 @@
 import { Shuttle, Fire } from "./shuttle";
+import Enemy from "./enemies";
 
 var row = 30
 var column = 100
@@ -26,20 +27,8 @@ function checkKey(e) {
         shuttle.moveUp();
     } else if (e.keyCode == '40') {
         shuttle.moveDown();
-    }
-    // } else if (e.keyCode == '37') {
-    //     shiftL();
-    // } else if (e.keyCode == '39') {
-    //     shiftR();
-    // }
 
-}
-
-window.onload = function() {
-
-    shuttle = new Shuttle();
-    document.getElementById("startGame").addEventListener("click", () => {
-        shuttle.createShuttle();
+    } else if (e.keyCode == '32') {
         let fire = new Fire(shuttle);
 
         var intervall = setInterval(function() {
@@ -49,10 +38,23 @@ window.onload = function() {
                 clearInterval(intervall)
             }
         }, 10);
+    } else if (e.keyCode == '39') {
+        console.log("here 39")
+        var enemy = new Enemy();
+        enemy.createEnemies();
 
+    }
 
+}
 
+window.onload = function() {
+
+    shuttle = new Shuttle();
+    document.getElementById("startGame").addEventListener("click", () => {
+        shuttle.createShuttle();
     });
+
+
     document.getElementById("createButton").addEventListener("click", createWorld);
 
     document.addEventListener("keydown", (e) => checkKey(e));
