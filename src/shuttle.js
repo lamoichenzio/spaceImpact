@@ -2,7 +2,7 @@ class Shuttle {
     constructor() {
         this.color = "#000";
         this.x = [2, 2, 2, 3];
-        this.y = [14, 15, 16, 15];
+        this.y = [12, 13, 14, 13];
         this.id = "shuttle";
         this.className = "shuttle";
         this.title = "shuttle";
@@ -27,10 +27,9 @@ class Shuttle {
     moveUp() {
 
         if (this.y[0] > 2) {
-            console.log("here");
 
-            var oldPositions = [];
-            var newPosition = [];
+            let oldPositions = [];
+            let newPosition = [];
             for (let i = 0; i <= 3; i++) {
                 oldPositions.push(this.y[i] + "-" + this.x[i]);
                 this.y[i] -= 2;
@@ -48,17 +47,11 @@ class Shuttle {
                 cell.className = this.className;
                 cell.title = this.title;
             }
-        } else {
-
-            console.log("no condition");
-            console.log(this.y[0]);
-
         }
     }
 
     moveDown() {
-        if (this.y[2] < 29) {
-            console.log("here");
+        if (this.y[2] < 23) {
 
             let oldPositions = [];
             let newPosition = [];
@@ -80,11 +73,6 @@ class Shuttle {
 
                 // cell.id = this.id;
             }
-        } else {
-
-            console.log("no condition");
-            console.log(this.y[0]);
-
         }
     }
 
@@ -104,7 +92,7 @@ class Fire {
     }
 
     moveFire() {
-        if (this.x != 101) {
+        if (this.x != 61) {
 
             var cell = document.getElementById(this.y + "-" + (this.x - 1));
 
@@ -116,12 +104,10 @@ class Fire {
             var cell = document.getElementById(this.y + "-" + this.x);
 
             if (cell.title == "enemy") {
-                console.log("enemyyyyy");
-
 
                 var second_cell = document.getElementById(this.y + 1 + "-" + this.x);
                 if (second_cell != undefined && second_cell.title == "enemy") {
-                    console.log("below");
+                    console.log("cell below");
 
                     second_cell.className = "cell";
                     second_cell.title = "cell";
@@ -129,13 +115,14 @@ class Fire {
                 }
                 var third_cell = document.getElementById(this.y - 1 + "-" + this.x);
                 if (third_cell != undefined && third_cell.title == "enemy") {
+                    console.log("cell above");
+
                     third_cell.className = "cell";
                     third_cell.title = "cell";
-                    console.log("above");
-
 
                 }
-                this.x = 101;
+                console.log("enemyyyyy");
+                this.x = 61;
 
 
             } else {

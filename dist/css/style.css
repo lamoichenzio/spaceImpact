@@ -1,28 +1,28 @@
 .world {
     position: fixed;
     border-collapse: collapse;
-    border: 5px solid;
+    border: 1px solid;
 }
 
 .cell {
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
 }
 
 .shuttle {
     background-color: crimson;
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
 }
 
 .fire {
     background-color: darkblue;
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
 }
 
 .enemy {
     background-color: black;
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
 }
