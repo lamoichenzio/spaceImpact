@@ -36,6 +36,8 @@ let createWorld = function() {
 function updateScore() {
     score += 100;
     console.log(score);
+    document.getElementById("score").innerText = score;
+
 }
 
 
