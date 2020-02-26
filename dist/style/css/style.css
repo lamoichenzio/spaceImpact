@@ -1,0 +1,30 @@
+/* .world {
+    position: fixed;
+    border-collapse: collapse;
+    border: 1px solid;
+}
+*/
+
+.cell {
+    background-color: #101A37;
+    width: 14px;
+    height: 14px;
+}
+
+.shuttle {
+    background-color: ghostwhite;
+    width: 14px;
+    height: 14px;
+}
+
+.fire {
+    background-color: #2EFE21;
+    width: 14px;
+    height: 14px;
+}
+
+.enemy {
+    background-color: crimson;
+    width: 14px;
+    height: 14px;
+}

@@ -12,11 +12,9 @@ var enemyMoveSpeed = 200;
 var enemySpawnSpeed = 1000;
 
 var respawnIntervall;
-var updateDelay = 10000;
 var enemiesIntervall;
 
 var stopExecution = false;
-
 
 let createWorld = function() {
     var table = document.getElementById("world");
@@ -33,6 +31,37 @@ let createWorld = function() {
     }
 }
 
+function initializeGame() {
+
+    setTimeout(function() { startGame(); }, 3000);
+}
+
+
+function startGame() {
+
+    setEnemyIntervall();
+
+    setTimeout(function() {
+        clearInterval(enemiesIntervall)
+    }, 10000);
+
+    respawnIntervall = setInterval(function() {
+
+        if (stopExecution) {
+            clearInterval(respawnIntervall);
+            enemyMoveSpeed = 200;
+            enemySpawnSpeed = 1000;
+        } else {
+            clearInterval(enemiesIntervall)
+            setEnemyIntervall();
+            enemyMoveSpeed = enemyMoveSpeed - 4;
+            console.log("Updating move speed" + enemyMoveSpeed);
+            enemySpawnSpeed = enemySpawnSpeed - 20;
+            console.log("Updating Spawn speed" + enemyMoveSpeed);
+        }
+    }, 2000);
+}
+
 function updateScore() {
     score += 100;
     console.log(score);
@@ -44,9 +73,13 @@ function updateScore() {
 function updateLife() {
     life--;
     console.log(life);
+    document.getElementById("life").innerText = life;
+
     if (life == 0) {
         console.log("END GAME");
         stopExecution = true;
+        $('#mymodal').modal("show");
+        document.getElementById("totalScore").innerText = score;
     }
 }
 
@@ -109,29 +142,18 @@ function setEnemyIntervall() {
 
 window.onload = function() {
 
+    // setTimeout(function() {
+    //     $('#mymodal').modal("show");
+    // }, 500);
+
     shuttle = new Shuttle();
     document.getElementById("startGame").addEventListener("click", () => {
+
+        document.getElementById("startGame").disabled = true;
+        createWorld();
         shuttle.createShuttle();
-
-        setEnemyIntervall();
-
-        // setTimeout(function() {
-        //     clearInterval(enemiesIntervall)
-        // }, 10000);
-
-        respawnIntervall = setInterval(function() {
-            clearInterval(enemiesIntervall)
-            setEnemyIntervall();
-            enemyMoveSpeed = enemyMoveSpeed - 4;
-            console.log("Updating move speed" + enemyMoveSpeed);
-            enemySpawnSpeed = enemySpawnSpeed - 20;
-            console.log("Updating Spawn speed" + enemyMoveSpeed);
-
-        }, 2000);
+        initializeGame();
     });
-
-    document.getElementById("createButton").addEventListener("click", createWorld);
-
     document.addEventListener("keydown", (e) => checkKey(e));
 
 
