@@ -87,10 +87,6 @@ class Fire {
         this.title = "fire";
     }
 
-    get() {
-        return this;
-    }
-
     moveFire() {
         if (this.x != 61) {
 

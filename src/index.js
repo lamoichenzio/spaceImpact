@@ -83,27 +83,6 @@ function updateLife() {
     }
 }
 
-function checkKey(e) {
-    e = e || window.event;
-    if (e.keyCode == '38') {
-        shuttle.moveUp();
-    } else if (e.keyCode == '40') {
-        shuttle.moveDown();
-
-    } else if (e.keyCode == '32') {
-        let fire = new Fire(shuttle);
-
-        var fireIntervall = setInterval(function() {
-            if (fire.x <= 61) {
-                fire.moveFire();
-            } else {
-                clearInterval(fireIntervall)
-            }
-        }, 10);
-
-    }
-
-}
 
 function setEnemyIntervall() {
     enemiesIntervall = setInterval(function() {
@@ -140,11 +119,29 @@ function setEnemyIntervall() {
     }, enemySpawnSpeed);
 }
 
-window.onload = function() {
+function checkKey(e) {
+    e = e || window.event;
+    if (e.keyCode == '38') {
+        shuttle.moveUp();
+    } else if (e.keyCode == '40') {
+        shuttle.moveDown();
 
-    // setTimeout(function() {
-    //     $('#mymodal').modal("show");
-    // }, 500);
+    } else if (e.keyCode == '32') {
+        let fire = new Fire(shuttle);
+
+        var fireIntervall = setInterval(function() {
+            if (fire.x <= 61) {
+                fire.moveFire();
+            } else {
+                clearInterval(fireIntervall)
+            }
+        }, 10);
+
+    }
+
+}
+
+window.onload = function() {
 
     shuttle = new Shuttle();
     document.getElementById("startGame").addEventListener("click", () => {
@@ -155,6 +152,4 @@ window.onload = function() {
         initializeGame();
     });
     document.addEventListener("keydown", (e) => checkKey(e));
-
-
 }

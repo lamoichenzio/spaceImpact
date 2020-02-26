@@ -14,10 +14,6 @@ class Enemy {
 
     }
 
-    get() {
-        return this;
-    }
-
     createEnemies() {
 
         let positions = [];
