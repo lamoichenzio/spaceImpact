@@ -1,15 +1,10 @@
 class Shuttle {
     constructor() {
-        this.color = "#000";
         this.x = [2, 2, 2, 3];
         this.y = [12, 13, 14, 13];
         this.id = "shuttle";
         this.className = "shuttle";
         this.title = "shuttle";
-    }
-
-    get() {
-        return this;
     }
 
     createShuttle() {
@@ -25,7 +20,6 @@ class Shuttle {
     }
 
     moveUp() {
-
         if (this.y[0] > 2) {
 
             let oldPositions = [];
@@ -70,8 +64,6 @@ class Shuttle {
                 let cell = document.getElementById(position);
                 cell.className = this.className;
                 cell.title = this.title;
-
-                // cell.id = this.id;
             }
         }
     }
@@ -79,15 +71,16 @@ class Shuttle {
 }
 
 class Fire {
+
     constructor(shuttle) {
-        let nave = shuttle.get();
-        this.x = nave.x[3] + 1;
-        this.y = nave.y[1];
+        this.x = shuttle.x[3] + 1;
+        this.y = shuttle.y[1];
         this.className = "fire";
         this.title = "fire";
     }
 
     moveFire() {
+
         if (this.x != 61) {
 
             var cell = document.getElementById(this.y + "-" + (this.x - 1));
@@ -100,28 +93,22 @@ class Fire {
             var cell = document.getElementById(this.y + "-" + this.x);
 
             if (cell.title == "enemy") {
-
                 var second_cell = document.getElementById(this.y + 1 + "-" + this.x);
                 if (second_cell != undefined && second_cell.title == "enemy") {
-                    console.log("cell below");
-
                     second_cell.className = "cell";
                     second_cell.title = "cell";
-
                 }
+
                 var third_cell = document.getElementById(this.y - 1 + "-" + this.x);
                 if (third_cell != undefined && third_cell.title == "enemy") {
-                    console.log("cell above");
-
                     third_cell.className = "cell";
                     third_cell.title = "cell";
-
                 }
-                console.log("enemyyyyy");
+
                 this.x = 61;
 
-
             } else {
+
                 cell.className = this.className;
                 cell.title = this.title;
                 this.x += 1;
@@ -136,7 +123,6 @@ class Fire {
             this.x += 1;
 
         }
-
 
     }
 

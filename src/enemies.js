@@ -1,8 +1,10 @@
 class Enemy {
     constructor() {
-        this.color = "#000";
 
-        var y_r = getRandomIntInclusive(2, 23);
+        var y_min = 2
+        var y_max = 23
+
+        var y_r = Math.floor(Math.random() * (y_max - y_min + 1)) + y_min;
 
         this.x = [60, 60];
         this.y = [y_r, y_r + 1];
@@ -11,7 +13,6 @@ class Enemy {
         this.title = "enemy";
         this.destroyed = false;
         this.collision = false;
-
     }
 
     createEnemies() {
@@ -86,12 +87,6 @@ class Enemy {
 
         }
     }
-}
-
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //Il max è incluso e il min è incluso 
 }
 
 export default Enemy;

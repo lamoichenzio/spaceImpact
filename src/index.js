@@ -1,25 +1,24 @@
 import { Shuttle, Fire } from "./shuttle";
 import Enemy from "./enemies";
 
+let row = 25
+let column = 60
 
-var fires = [];
+let shuttle;
 
-var row = 25
-var column = 60
-var score = 0;
-var life = 3;
+let score = 0;
+let life = 3;
 
-var shuttle;
+let enemyMoveSpeed = 200;
+let enemySpawnSpeed = 1000;
 
-var enemyMoveSpeed = 200;
-var enemySpawnSpeed = 1000;
+let respawnIntervall;
+let enemiesIntervall;
 
-var respawnIntervall;
-var enemiesIntervall;
+let stopExecution = false;
+let justInitialized = false;
 
-var stopExecution = false;
-var justInitialized = false;
-
+// Creates the space
 let createWorld = function() {
     var table = document.getElementById("world");
     for (var i = 1; i <= row; i++) {
@@ -35,25 +34,26 @@ let createWorld = function() {
     }
 }
 
+// Start the game with a delay of 3 seconds
 function initializeGame() {
-
     setTimeout(function() { startGame(); }, 3000);
 }
 
-
+// Start the game 
 function startGame() {
 
     justInitialized = false;
 
+    // Start the basic intervall
     setEnemyIntervall();
 
+    // After 10 seconds reset the new intervall
     setTimeout(function() {
-
         clearInterval(enemiesIntervall)
     }, 10000);
 
+    // Change speed of spawn and moves
     respawnIntervall = setInterval(function() {
-
         if (stopExecution) {
             clearInterval(respawnIntervall);
             enemyMoveSpeed = 200;
@@ -61,10 +61,8 @@ function startGame() {
         } else {
             clearInterval(enemiesIntervall)
             setEnemyIntervall();
-            enemyMoveSpeed = enemyMoveSpeed - 4;
-            console.log("Updating move speed" + enemyMoveSpeed);
+            enemyMoveSpeed = enemyMoveSpeed - 2;
             enemySpawnSpeed = enemySpawnSpeed - 20;
-            console.log("Updating Spawn speed" + enemyMoveSpeed);
         }
     }, 2000);
 }
@@ -73,7 +71,6 @@ function updateScore() {
     score += 100;
     console.log(score);
     document.getElementById("score").innerText = score;
-
 }
 
 
@@ -90,18 +87,16 @@ function updateLife() {
     }
 }
 
-
+// Intervall of the enemies
+// Check also collision and remove remaining pieces
 function setEnemyIntervall() {
     enemiesIntervall = setInterval(function() {
         if (stopExecution) {
             clearInterval(enemiesIntervall);
         } else {
-
             var enemy = new Enemy();
             enemy.createEnemies();
-
             var moveIntervall = setInterval(function() {
-
                 if (stopExecution) {
                     clearInterval(enemiesIntervall);
                 } else {
@@ -113,29 +108,33 @@ function setEnemyIntervall() {
                             updateScore();
                         };
                         if (enemy.collision) {
-
                             updateLife();
-
                         }
                         clearInterval(moveIntervall)
                     }
                 }
             }, enemyMoveSpeed);
-
         }
     }, enemySpawnSpeed);
 }
 
+// Keyboard event
 function checkKey(e) {
     e = e || window.event;
+
+    // UpArrow Key
     if (e.keyCode == '38') {
         shuttle.moveUp();
+
+        // DownArrow Key
     } else if (e.keyCode == '40') {
         shuttle.moveDown();
 
+        // Space Key
     } else if (e.keyCode == '32') {
-        let fire = new Fire(shuttle);
 
+        // Instantiates a new fire
+        let fire = new Fire(shuttle);
         var fireIntervall = setInterval(function() {
             if (fire.x <= 61) {
                 fire.moveFire();
@@ -148,6 +147,8 @@ function checkKey(e) {
 
 }
 
+// Restart the game after end
+// Reset the variables values.
 function restartGame() {
 
     enemyMoveSpeed = 200;
@@ -181,13 +182,12 @@ function restartGame() {
 
 }
 
-
 window.onload = function() {
 
+    // instantiate a new Shuttle
     shuttle = new Shuttle();
 
     document.getElementById("startGame").addEventListener("click", () => {
-
         document.getElementById("startGame").disabled = true;
         createWorld();
         shuttle.createShuttle();
