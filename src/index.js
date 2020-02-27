@@ -1,6 +1,9 @@
 import { Shuttle, Fire } from "./shuttle";
 import Enemy from "./enemies";
 
+
+var fires = [];
+
 var row = 25
 var column = 60
 var score = 0;
@@ -15,6 +18,7 @@ var respawnIntervall;
 var enemiesIntervall;
 
 var stopExecution = false;
+var justInitialized = false;
 
 let createWorld = function() {
     var table = document.getElementById("world");
@@ -39,9 +43,12 @@ function initializeGame() {
 
 function startGame() {
 
+    justInitialized = false;
+
     setEnemyIntervall();
 
     setTimeout(function() {
+
         clearInterval(enemiesIntervall)
     }, 10000);
 
@@ -98,7 +105,7 @@ function setEnemyIntervall() {
                 if (stopExecution) {
                     clearInterval(enemiesIntervall);
                 } else {
-                    if (enemy.x[0] >= 1 && !enemy.destroyed && !enemy.collision) {
+                    if (enemy.x[0] >= 1 && !enemy.destroyed && !enemy.collision && !justInitialized) {
                         enemy.moveEnemies();
                     } else {
                         console.log(enemy.destroyed);
@@ -141,9 +148,44 @@ function checkKey(e) {
 
 }
 
+function restartGame() {
+
+    enemyMoveSpeed = 200;
+    enemySpawnSpeed = 1000;
+
+    score = -100;
+    life = 4;
+
+    updateScore();
+    updateLife();
+
+    respawnIntervall = null;
+    enemiesIntervall = null;
+
+    stopExecution = false;
+    justInitialized = true;
+
+    $('#mymodal').modal("hide");
+
+    var table = document.getElementById("world");
+    var child = table.lastElementChild;
+    while (child) {
+        table.removeChild(child);
+        child = table.lastElementChild;
+    }
+
+    shuttle = new Shuttle();
+    createWorld();
+    shuttle.createShuttle();
+    initializeGame();
+
+}
+
+
 window.onload = function() {
 
     shuttle = new Shuttle();
+
     document.getElementById("startGame").addEventListener("click", () => {
 
         document.getElementById("startGame").disabled = true;
@@ -151,5 +193,10 @@ window.onload = function() {
         shuttle.createShuttle();
         initializeGame();
     });
+
+    document.getElementById("restartGame").addEventListener("click", () => {
+        restartGame();
+    });
+
     document.addEventListener("keydown", (e) => checkKey(e));
 }
