@@ -1,11 +1,4 @@
-/* .world {
-    position: fixed;
-    border-collapse: collapse;
-    border: 1px solid;
-}
-*/
-
-.cell {
+.empty-cell {
     background-color: #101A37;
     width: 14px;
     height: 14px;
