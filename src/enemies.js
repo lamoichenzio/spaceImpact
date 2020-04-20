@@ -1,69 +1,82 @@
+import {
+    EMPTY_CELL_TITLE,
+    EMPTY_CELL_CLASS,
+    SHUTTLE_TITLE,
+    ENEMY_TITLE,
+    ENEMY_CLASS,
+    ENEMY_DESTROYED_TITLE
+} from "./config"
+
 class Enemy {
+
     constructor() {
 
+        // Range of values for row indexes
         var y_min = 2
         var y_max = 23
 
+        // Get a randomVaue form the y indexes range
         var y_r = Math.floor(Math.random() * (y_max - y_min + 1)) + y_min;
 
+        // The enemy start always formthe last column
         this.x = [60, 60];
         this.y = [y_r, y_r + 1];
-        this.id = "enemy";
-        this.className = "enemy";
-        this.title = "enemy";
+        this.className = ENEMY_CLASS;
+        this.title = ENEMY_TITLE;
+
+        // Used in case of enemy destroyed by fire
         this.destroyed = false;
+
+        // Used in case of collision with the shuttle
         this.collision = false;
+
     }
 
-    createEnemies() {
-
-        let positions = [];
+    // Creates enemy in the space
+    createEnemy() {
 
         for (let i = 0; i < 2; i++) {
-            positions.push(this.y[i] + "-" + this.x[i]);
-        }
 
-        for (let position of positions) {
-            var cell = document.getElementById(position);
+            var cell = document.getElementById(this.y[i] + "-" + this.x[i]);
             cell.className = this.className;
             cell.title = this.title;
+
         }
+
     }
 
+    // Moves the enemy to ne next cell
     moveEnemies() {
 
         let cellUP = document.getElementById(this.y[0] + "-" + this.x[0]);
         let cellDOWN = document.getElementById(this.y[1] + "-" + this.x[1]);
 
+        // Case if the enemy is on the left border of the space
         if (this.x[0] == 1) {
 
-            cellDOWN.title = "cell";
-            cellDOWN.className = "cell";
-            cellUP.title = "cell";
-            cellUP.className = "cell";
+            // Sets both cells to an empty cell
+            cellDOWN.title = EMPTY_CELL_TITLE;
+            cellDOWN.className = EMPTY_CELL_CLASS;
+            cellUP.title = EMPTY_CELL_TITLE;
+            cellUP.className = EMPTY_CELL_CLASS;
 
         } else {
 
-            if (cellUP.title == "cell" || cellDOWN.title == "cell") {
+            // if an enemy is destroyed set destroyed to true
+            if (cellUP.title == ENEMY_DESTROYED_TITLE || cellDOWN.title == ENEMY_DESTROYED_TITLE) {
 
-                if (cellDOWN.title != "cell") {
-                    cellDOWN.title = "cell";
-                    cellDOWN.className = "cell";
-                }
-
-                if (cellUP.title != "cell") {
-                    cellUP.title = "cell";
-                    cellUP.className = "cell";
-                }
+                cellDOWN.title = EMPTY_CELL_TITLE;
+                cellUP.title = EMPTY_CELL_TITLE;
 
                 this.destroyed = true;
 
             } else {
 
-                cellUP.title = "cell";
-                cellUP.className = "cell";
-                cellDOWN.title = "cell";
-                cellDOWN.className = "cell";
+                // mode the enemy to the next cells
+                cellUP.title = EMPTY_CELL_TITLE;
+                cellUP.className = EMPTY_CELL_CLASS;
+                cellDOWN.title = EMPTY_CELL_TITLE;
+                cellDOWN.className = EMPTY_CELL_CLASS;
 
                 this.x[0] = this.x[0] - 1;
                 this.x[1] = this.x[1] - 1;
@@ -71,7 +84,8 @@ class Enemy {
                 let newCellUP = document.getElementById(this.y[0] + "-" + this.x[0]);
                 let newCellDOWN = document.getElementById(this.y[1] + "-" + this.x[1]);
 
-                if (newCellUP.title == "shuttle" || newCellDOWN.title == "shuttle") {
+                // if in the new position there is the shuttle set collion to true
+                if (newCellUP.title == SHUTTLE_TITLE || newCellDOWN.title == SHUTTLE_TITLE) {
 
                     this.collision = true;
 
@@ -82,11 +96,15 @@ class Enemy {
 
                     newCellDOWN.className = this.className;
                     newCellDOWN.title = this.title;
+
                 }
+
             }
 
         }
+
     }
+
 }
 
 export default Enemy;
