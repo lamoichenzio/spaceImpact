@@ -1,7 +1,7 @@
 # SpaceImpact
 
 ## The Game
-### The game consist in a very light reply of the game SpaceImpact. When the shuttle shoot and hit an enemy, the enemy is destroyed and the palyer earns 100 points. When an enemy hit the shuttle, the player lose 1 life of 3. The shuttle can be moved only up and down. Every 2 second the moving speed and the respwan speed of the enemy are increased.
+### The game consists in a very light reply of the game SpaceImpact. When the shuttle shoots and hits an enemy, the enemy is destroyed and the palyer earns 100 points. When an enemy hit the shuttle, the player lose 1 life of 3. The shuttle can be moved only up and down. Every 2 second the moving speed and the respwan speed of the enemy are increased.
 
 ## The Space
 ### The space consists in a table 25x60 created programmatically in which each cell have an id in this format: y-x where y is the row index and x the column index. In this table, all the elements are only represented wich a defined css class. In the space every empty cell is represented by the css class "empty-cell". 
