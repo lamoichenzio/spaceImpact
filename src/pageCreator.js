@@ -1,11 +1,18 @@
 import {
 	END_GAME_MODAL,
+	COUNTDOWN_MODAL,
+	RESTART_MODAL,
 	WORLD_ID,
 	SCORE_ID,
 	LIFE_ID,
 	TOTAL_SCORE_ID,
 	START_GAME_BUTTON_ID,
-	NEW_GAME_BUTTON_ID
+	RESTART_GAME_BUTTON_ID,
+	RESTART_BUTTON_ID,
+	PLAY_PAUSE_GAME_BUTTON_ID,
+	NEW_GAME_BUTTON_ID,
+	CONTINUE_BUTTON_ID,
+	COUNTDOWN_TIMER
 } from "./config"
 
 class PageCreator {
@@ -24,9 +31,15 @@ class PageCreator {
 			'<h1>Space Impact</h1>' +
 			'</div></div>'
 
-		const buttonStart = '<div class="row justify-content-center align-items-center my-4">' +
+		const buttons = '<div class="row justify-content-center align-items-center my-4">' +
 			'<div class="col-auto">' +
 			'<button id="' + START_GAME_BUTTON_ID + '" class="btn btn-primary">Start Game</button>' +
+			'</div>' +
+			'<div class="col-auto">' +
+			'<button id="' + PLAY_PAUSE_GAME_BUTTON_ID + '" class="btn btn-primary" disabled>Pause</button>' +
+			'</div>' +
+			'<div class="col-auto">' +
+			'<button id="' + RESTART_GAME_BUTTON_ID + '" class="btn btn-primary" disabled>Restart Game</button>' +
 			'</div>' +
 			'</div>'
 
@@ -71,8 +84,37 @@ class PageCreator {
 			'</div>' +
 			'</div>'
 
+		const modalCountdown = '<div id="' + COUNTDOWN_MODAL + '" class="modal fade bd-example-modal-xl" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel"  aria-hidden="true">' +
+			'<div class="modal-dialog modal-dialog-centered modal-sm" role="document">' +
+			'<div class="modal-content">' +
+			'<div class="modal-body">' +
+			'<div class="row justify-content-center align-items-center my-5">' +
+			'<div class="col-auto">' +
+			'<h1 id="' + COUNTDOWN_TIMER + '"></h1>' +
+			'</div>' +
+			'</div>' +
+			'</div>' +
+			'</div>' +
+			'</div>' +
+			'</div>'
 
-		document.body.innerHTML = header + buttonStart + gameInfo + spaceContainer + modalEndGame
+		const modalReset = '<div id="' + RESTART_MODAL + '" class="modal fade bd-example-modal-xl" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">' +
+			'<div class="modal-dialog modal-dialog-centered modal-xl" role="document">' +
+			'<div class="modal-content">' +
+			'<div class="modal-body">' +
+			'<div class="row justify-content-center align-items-center my-5">' +
+			'<h1>Do you want to restart the game?</h1>' +
+			'</div>' +
+			'</div>' +
+			'<div class="modal-footer justify-content-center align-items-center">' +
+			'<button id="' + CONTINUE_BUTTON_ID + '" class="btn btn-primary my-5">Continue</button>' +
+			'<button id="' + RESTART_BUTTON_ID + '" class="btn btn-primary my-5">Restart Game</button>' +
+			'</div>' +
+			'</div>' +
+			'</div>' +
+			'</div>'
+
+		document.body.innerHTML = header + buttons + gameInfo + spaceContainer + modalEndGame + modalCountdown + modalReset
 
 	}
 

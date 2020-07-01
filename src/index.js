@@ -15,6 +15,13 @@ import {
     NEW_GAME_BUTTON_ID,
     EMPTY_CELL_TITLE,
     EMPTY_CELL_CLASS,
+    PLAY_PAUSE_GAME_BUTTON_ID,
+    RESTART_GAME_BUTTON_ID,
+    COUNTDOWN_MODAL,
+    COUNTDOWN_TIMER,
+    RESTART_MODAL,
+    RESTART_BUTTON_ID,
+    CONTINUE_BUTTON_ID,
 } from "./config"
 
 let shuttle = null;
@@ -25,10 +32,11 @@ let life = 3;
 let enemyMoveSpeed = 200;
 let enemySpawnSpeed = 1000;
 
-let respawnIntervall;
-let enemiesIntervall;
+let respawnIntervall = null;
+let enemiesIntervall = null;
 
 let stopExecution = false;
+let playPauseExecution = false;
 
 // Creates the space table and set id, title and the class to each cell
 const createSpace = () => {
@@ -65,6 +73,7 @@ const startEnemies = () => {
 // Start the enemies spawn and movement 
 const enemiesLoop = () => {
 
+
     // Set the respawn intervall of the enemies updating every 2 seconds the speed of movement and spawn.
     respawnIntervall = setInterval(() => {
 
@@ -77,9 +86,14 @@ const enemiesLoop = () => {
         } else {
 
             clearInterval(enemiesIntervall)
-            setEnemyIntervall();
-            enemyMoveSpeed = enemyMoveSpeed - 2;
-            enemySpawnSpeed = enemySpawnSpeed - 15;
+
+            if (!playPauseExecution) {
+
+                setEnemyIntervall();
+                enemyMoveSpeed = enemyMoveSpeed - 2;
+                enemySpawnSpeed = enemySpawnSpeed - 15;
+
+            }
 
         }
 
@@ -92,35 +106,43 @@ const setEnemyIntervall = () => {
 
     enemiesIntervall = setInterval(() => {
 
-        if (stopExecution) clearInterval(enemiesIntervall)
+        if (stopExecution) clearInterval(enemiesIntervall);
         else {
 
-            // Every time a enemy is spawned set the intervall for moving it.
-            const enemy = new Enemy();
+            if (!playPauseExecution) {
 
-            const moveIntervall = setInterval(() => {
+                // Every time a enemy is spawned set the intervall for moving it.
+                const enemy = new Enemy();
 
-                if (stopExecution) {
+                const moveIntervall = setInterval(() => {
 
-                    clearInterval(enemiesIntervall)
-                    clearInterval(moveIntervall)
+                    if (stopExecution) {
 
-                } else {
+                        clearInterval(moveIntervall);
+                        // clearInterval(enemiesIntervall)
 
-                    // if the enemy is not destroyed or not have a collision with the shuttle, the enemy is moved on the next cell
-                    // else update score or life and stop the intervall of the enemy
-                    if (enemy.x[0] >= 1 && !enemy.destroyed && !enemy.collision) enemy.moveEnemies()
-                    else {
+                    } else {
 
-                        if (enemy.destroyed) updateScore()
-                        if (enemy.collision) updateLife()
-                        clearInterval(moveIntervall)
+                        if (!playPauseExecution) {
+
+                            // if the enemy is not destroyed or not have a collision with the shuttle, the enemy is moved on the next cell
+                            // else update score or life and stop the intervall of the enemy
+                            if (enemy.x[0] >= 1 && !enemy.destroyed && !enemy.collision) enemy.moveEnemies()
+                            else {
+
+                                if (enemy.destroyed) updateScore()
+                                if (enemy.collision) updateLife()
+                                clearInterval(moveIntervall);
+
+                            }
+
+                        }
 
                     }
 
-                }
+                }, enemyMoveSpeed);
 
-            }, enemyMoveSpeed);
+            }
 
         }
 
@@ -146,7 +168,7 @@ function updateLife() {
     document.getElementById(LIFE_ID).innerText = life;
 
     // if life is egual to 0 end the game using the stopExecution variable
-    if (life == 0) {
+    if (life === 0) {
 
         stopExecution = true;
         $('#' + END_GAME_MODAL).modal("show");
@@ -159,7 +181,7 @@ function updateLife() {
 
 
 // Keyboard event
-const checkKey = ({keyCode}) => {
+const checkKey = ({ keyCode }) => {
 
     switch (keyCode) {
 
@@ -192,9 +214,6 @@ const checkKey = ({keyCode}) => {
 // Restart the game after the end
 const restartGame = () => {
 
-    // Reset the variables value
-    stopExecution = false;
-
     enemyMoveSpeed = 200;
     enemySpawnSpeed = 1000;
 
@@ -215,12 +234,20 @@ const restartGame = () => {
     const table = document.getElementById(WORLD_ID);
     let child = table.lastElementChild;
     while (child) {
-
         table.removeChild(child);
         child = table.lastElementChild;
     }
 
+
+    // Hides the end game modal
+    $('#' + END_GAME_MODAL).modal("hide");
+    $('#' + RESTART_MODAL).modal("hide");
+
     createSpace();
+
+    // Reset the variables value
+    stopExecution = false;
+    playPauseExecution = false;
 
     // Start the enemies spwaning
     startEnemies();
@@ -232,11 +259,14 @@ window.onload = function () {
     new PageCreator()
 
     // Instatiation of a the Shuttle
-    shuttle = new Shuttle();
+    // shuttle = new Shuttle();
 
     document.getElementById(START_GAME_BUTTON_ID).addEventListener("click", () => {
 
         document.getElementById(START_GAME_BUTTON_ID).disabled = true;
+        document.getElementById(PLAY_PAUSE_GAME_BUTTON_ID).disabled = false;
+        document.getElementById(RESTART_GAME_BUTTON_ID).disabled = false;
+
         createSpace();
 
         // Start the enemies spwaning
@@ -244,10 +274,74 @@ window.onload = function () {
 
     });
 
+    document.getElementById(RESTART_GAME_BUTTON_ID).addEventListener("click", () => {
+
+
+        playPauseExecution = true;
+
+        $("#" + RESTART_MODAL).modal("show");
+
+    });
+
+    document.getElementById(PLAY_PAUSE_GAME_BUTTON_ID).addEventListener("click", () => {
+
+        if (playPauseExecution) {
+
+            document.getElementById(PLAY_PAUSE_GAME_BUTTON_ID).innerText = "Pause";
+
+            $("#" + COUNTDOWN_MODAL).modal("show");
+
+            let timer = 3;
+            document.getElementById(COUNTDOWN_TIMER).innerText = timer;
+
+            const countdown = setInterval(() => {
+
+                $("#" + COUNTDOWN_TIMER).text(--timer);
+                if (timer == 0) {
+
+                    $("#" + COUNTDOWN_MODAL).modal("hide");
+                    playPauseExecution = false;
+                    clearInterval(countdown);
+
+                }
+
+                console.log("here " + timer)
+
+            }, 1000);
+
+        }
+        else {
+
+            playPauseExecution = !playPauseExecution;
+            document.getElementById(PLAY_PAUSE_GAME_BUTTON_ID).innerText = "Play";
+
+        }
+
+    });
+
+
+
     document.getElementById(NEW_GAME_BUTTON_ID).addEventListener("click", () => {
 
         // restart the game
         restartGame();
+
+    });
+
+    document.getElementById(RESTART_BUTTON_ID).addEventListener("click", () => {
+
+        stopExecution = true;
+    
+        // restart the game
+        setTimeout(() =>  restartGame(), 1000);
+
+    });
+
+    document.getElementById(CONTINUE_BUTTON_ID).addEventListener("click", () => {
+
+        // restart the game
+        $("#" + RESTART_MODAL).modal("hide");
+        playPauseExecution = false;
 
     });
 
