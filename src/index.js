@@ -1,21 +1,23 @@
-import { Shuttle, Fire } from "./shuttle";
+import Shuttle from "./shuttle";
+import Fire from "./fire";
 import Enemy from "./enemies";
 import PageCreator from "./pageCreator"
+import { setClassAndTitle } from "./utility";
 import {
-	ROW,
-	COL,
-	END_GAME_MODAL,
-	WORLD_ID,
-	SCORE_ID,
-	LIFE_ID,
-	TOTAL_SCORE_ID,
-	START_GAME_BUTTON_ID,
-	NEW_GAME_BUTTON_ID,
-	EMPTY_CELL_TITLE,
-	EMPTY_CELL_CLASS,
-} from  "./config"
+    ROW,
+    COL,
+    END_GAME_MODAL,
+    WORLD_ID,
+    SCORE_ID,
+    LIFE_ID,
+    TOTAL_SCORE_ID,
+    START_GAME_BUTTON_ID,
+    NEW_GAME_BUTTON_ID,
+    EMPTY_CELL_TITLE,
+    EMPTY_CELL_CLASS,
+} from "./config"
 
-let shuttle;
+let shuttle = null;
 
 let score = 0;
 let life = 3;
@@ -29,18 +31,17 @@ let enemiesIntervall;
 let stopExecution = false;
 
 // Creates the space table and set id, title and the class to each cell
-let createSpace = function() {
+const createSpace = () => {
 
-    var table = document.getElementById(WORLD_ID);
-    for (var i = 1; i <= ROW; i++) {
+    const table = document.getElementById(WORLD_ID);
+    for (let i = 1; i <= ROW; i++) {
 
-        var tr = document.createElement("tr");
-        for (var e = 1; e <= COL; e++) {
+        const tr = document.createElement("tr");
+        for (let e = 1; e <= COL; e++) {
 
-            var td = document.createElement("td");
+            const td = document.createElement("td");
             td.id = i + "-" + e;
-            td.title = EMPTY_CELL_TITLE
-            td.className = EMPTY_CELL_CLASS;
+            setClassAndTitle(td, EMPTY_CELL_CLASS, EMPTY_CELL_TITLE);
             tr.appendChild(td);
 
         }
@@ -55,56 +56,55 @@ let createSpace = function() {
 }
 
 // Start the generation of enemies with a delay of 3 seconds
-function startEnemies() {
-    
-    setTimeout(function() { enemiesLoop(); }, 3000);
+const startEnemies = () => {
+
+    setTimeout(() => enemiesLoop(), 3000);
 
 }
 
 // Start the enemies spawn and movement 
-function enemiesLoop() {
+const enemiesLoop = () => {
 
     // Set the respawn intervall of the enemies updating every 2 seconds the speed of movement and spawn.
-    respawnIntervall = setInterval(function() {
-    
+    respawnIntervall = setInterval(() => {
+
         if (stopExecution) {
-    
+
             clearInterval(respawnIntervall);
             enemyMoveSpeed = 200;
             enemySpawnSpeed = 1000;
-    
+
         } else {
-    
+
             clearInterval(enemiesIntervall)
             setEnemyIntervall();
             enemyMoveSpeed = enemyMoveSpeed - 2;
             enemySpawnSpeed = enemySpawnSpeed - 15;
-    
+
         }
-    
+
     }, 2000);
 
 }
 
 // Intervall of the enemies. This intervall spawns enemies at every interation.
-function setEnemyIntervall() {
+const setEnemyIntervall = () => {
 
-    enemiesIntervall = setInterval(function() {
+    enemiesIntervall = setInterval(() => {
 
         if (stopExecution) clearInterval(enemiesIntervall)
         else {
 
             // Every time a enemy is spawned set the intervall for moving it.
-            var enemy = new Enemy();
-            enemy.createEnemy();
-            
-            var moveIntervall = setInterval(function() {
-                
+            const enemy = new Enemy();
+
+            const moveIntervall = setInterval(() => {
+
                 if (stopExecution) {
-                
+
                     clearInterval(enemiesIntervall)
                     clearInterval(moveIntervall)
-                
+
                 } else {
 
                     // if the enemy is not destroyed or not have a collision with the shuttle, the enemy is moved on the next cell
@@ -130,7 +130,7 @@ function setEnemyIntervall() {
 
 // Update the score and display it in the page
 function updateScore() {
-   
+
     score += 100;
     console.log(score);
     document.getElementById(SCORE_ID).innerText = score;
@@ -140,18 +140,18 @@ function updateScore() {
 
 // Update the life and display it in the page
 function updateLife() {
-   
+
     life--;
     console.log(life);
     document.getElementById(LIFE_ID).innerText = life;
 
     // if life is egual to 0 end the game using the stopExecution variable
     if (life == 0) {
-   
+
         stopExecution = true;
         $('#' + END_GAME_MODAL).modal("show");
         document.getElementById(TOTAL_SCORE_ID).innerText = score;
-   
+
     }
 
 }
@@ -159,35 +159,38 @@ function updateLife() {
 
 
 // Keyboard event
-function checkKey(event) {
-    event = event || window.event;
+const checkKey = ({keyCode}) => {
 
-    if (event.keyCode == '38') {
-        
-        // UpArrow Key: move shuttle above
-        shuttle.moveUp();
+    switch (keyCode) {
 
-    } else if (event.keyCode == '40') {
-       
-        // DownArrow Key: move shuttle below
-        shuttle.moveDown();
+        case 38:
+            // UpArrow Key: move shuttle above
+            shuttle.moveUp();
+            break;
 
-    
-    } else if (event.keyCode == '32') {
-        
-        // Space Key: shoot
-        // Instantiates a new fire
-        let fire = new Fire(shuttle);
+        case 40:
+            // DownArrow Key: move shuttle below
+            shuttle.moveDown();
+            break;
 
-        // call moveFire function that moves the fire in the space
-        fire.moveFire();
+        case 32:
+            // Space Key: shoot
+            // Instantiates a new fire
+            const fire = new Fire(shuttle);
+
+            // call moveFire function that moves the fire in the space
+            fire.moveFire();
+            break;
+
+        default:
+            break;
 
     }
 
 }
 
 // Restart the game after the end
-function restartGame() {
+const restartGame = () => {
 
     // Reset the variables value
     stopExecution = false;
@@ -209,8 +212,8 @@ function restartGame() {
     $('#' + END_GAME_MODAL).modal("hide");
 
     // Remove all elements from the space and re-creates it
-    var table = document.getElementById(WORLD_ID);
-    var child = table.lastElementChild;
+    const table = document.getElementById(WORLD_ID);
+    let child = table.lastElementChild;
     while (child) {
 
         table.removeChild(child);
@@ -224,10 +227,9 @@ function restartGame() {
 
 }
 
-window.onload = function() {
+window.onload = function () {
 
-    let pageCreator = new PageCreator
-    pageCreator.createPage()
+    new PageCreator()
 
     // Instatiation of a the Shuttle
     shuttle = new Shuttle();
@@ -236,10 +238,10 @@ window.onload = function() {
 
         document.getElementById(START_GAME_BUTTON_ID).disabled = true;
         createSpace();
-        
+
         // Start the enemies spwaning
         startEnemies();
-   
+
     });
 
     document.getElementById(NEW_GAME_BUTTON_ID).addEventListener("click", () => {
@@ -250,6 +252,6 @@ window.onload = function() {
     });
 
     // key event listener
-    document.addEventListener("keydown", (event) => checkKey(event));
+    document.addEventListener("keydown", event => checkKey(event));
 
 }
