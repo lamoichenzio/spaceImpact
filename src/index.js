@@ -179,6 +179,48 @@ function updateLife() {
 }
 
 
+// Restart the game after the end
+const restartGame = () => {
+
+    enemyMoveSpeed = 200;
+    enemySpawnSpeed = 1000;
+
+    score = -100;
+    life = 4;
+
+    updateScore();
+    updateLife();
+
+    // Reset the intervalls
+    respawnIntervall = null;
+    enemiesIntervall = null;
+
+    // Hides the end game modal
+    $('#' + END_GAME_MODAL).modal("hide");
+
+    // Remove all elements from the space and re-creates it
+    const table = document.getElementById(WORLD_ID);
+    let child = table.lastElementChild;
+    while (child) {
+        table.removeChild(child);
+        child = table.lastElementChild;
+    }
+
+    // Hides the end game modal
+    $('#' + END_GAME_MODAL).modal("hide");
+    $('#' + RESTART_MODAL).modal("hide");
+
+    createSpace();
+
+    // Reset the variables value
+    stopExecution = false;
+    playPauseExecution = false;
+
+    // Start the enemies spwaning
+    startEnemies();
+
+}
+
 
 // Keyboard event
 const checkKey = ({ keyCode }) => {
@@ -211,55 +253,9 @@ const checkKey = ({ keyCode }) => {
 
 }
 
-// Restart the game after the end
-const restartGame = () => {
-
-    enemyMoveSpeed = 200;
-    enemySpawnSpeed = 1000;
-
-    score = -100;
-    life = 4;
-
-    updateScore();
-    updateLife();
-
-    // Reset the intervalls
-    respawnIntervall = null;
-    enemiesIntervall = null;
-
-    // Hides the end game modal
-    $('#' + END_GAME_MODAL).modal("hide");
-
-    // Remove all elements from the space and re-creates it
-    const table = document.getElementById(WORLD_ID);
-    let child = table.lastElementChild;
-    while (child) {
-        table.removeChild(child);
-        child = table.lastElementChild;
-    }
-
-
-    // Hides the end game modal
-    $('#' + END_GAME_MODAL).modal("hide");
-    $('#' + RESTART_MODAL).modal("hide");
-
-    createSpace();
-
-    // Reset the variables value
-    stopExecution = false;
-    playPauseExecution = false;
-
-    // Start the enemies spwaning
-    startEnemies();
-
-}
-
 window.onload = function () {
 
     new PageCreator()
-
-    // Instatiation of a the Shuttle
-    // shuttle = new Shuttle();
 
     document.getElementById(START_GAME_BUTTON_ID).addEventListener("click", () => {
 
@@ -276,7 +272,6 @@ window.onload = function () {
 
     document.getElementById(RESTART_GAME_BUTTON_ID).addEventListener("click", () => {
 
-
         playPauseExecution = true;
 
         $("#" + RESTART_MODAL).modal("show");
@@ -285,6 +280,7 @@ window.onload = function () {
 
     document.getElementById(PLAY_PAUSE_GAME_BUTTON_ID).addEventListener("click", () => {
 
+        // If the game is already in pause shows a modal with a countdown
         if (playPauseExecution) {
 
             document.getElementById(PLAY_PAUSE_GAME_BUTTON_ID).innerText = "Pause";
@@ -333,13 +329,13 @@ window.onload = function () {
         stopExecution = true;
     
         // restart the game
+        // timeout is necessary to start the game with a delay foor stop every internal loop of previous run. 
         setTimeout(() =>  restartGame(), 1000);
 
     });
 
     document.getElementById(CONTINUE_BUTTON_ID).addEventListener("click", () => {
 
-        // restart the game
         $("#" + RESTART_MODAL).modal("hide");
         playPauseExecution = false;
 

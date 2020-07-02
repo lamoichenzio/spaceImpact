@@ -10,10 +10,13 @@
 ### The shuttle is represented by the css class "shuttle". It is placed on the table in the initial position defined in the x and y array defined in the Shuttle class. In the class are also defined the action that the shuttle can do: move up and move down.
 
 ## The Fire
-### The fire is represented by the css class "fire". It is a class containted in shuttle.js because there is a strong relationship beetwen them. In the fire class is also defined the function that moves the fire trhought the space. In this function there is also a cotroll for determining if the fire hits the enemies.
+### The fire is represented by the css class "fire". It is a class containted in fire.js. In the fire class is also defined the function that moves the fire trhought the space. In this function there is also a cotroll for determining if the fire hits the enemies.
 
 ## The Enemies
 ### The enemies are represented by the css class "enemy". In the index.js there is a controllor for the loop of the respawn of the enemies.
+
+## utility.js
+### in this file is written a method used in all the other files and classes
 
 ## congif.js
 ### In the config.js file are defined all the constants used in the others file of the game.
